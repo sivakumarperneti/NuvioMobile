@@ -5,21 +5,14 @@ on:
     branches: [ cmp-rewrite, main, master ]
   workflow_dispatch:
 
-env:
-  GIT_SUBMODULE_STRATEGY: none
-
 jobs:
   build-android:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: false
-          clean: false
-
-      - name: Strip broken submodules from git config
+      - name: Clone repository without submodules
         run: |
+          git clone --depth 1 --branch cmp-rewrite https://github.com/$GITHUB_REPOSITORY.git src
+          cd src
           git config --file .gitmodules --remove-section submodule.MPVKit 2>/dev/null || true
           rm -rf MPVKit .git/modules/MPVKit
 
@@ -39,14 +32,18 @@ jobs:
 
       - name: Prepare runtime properties
         run: |
+          cd src
           touch local.properties
           echo "sdk.dir=$ANDROID_HOME" >> local.properties
 
       - name: Build fullDebug APK
-        run: ./gradlew :androidApp:assembleFullDebug --no-daemon --stacktrace
+        run: |
+          cd src
+          chmod +x gradlew
+          ./gradlew :androidApp:assembleFullDebug --no-daemon --stacktrace
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Nuvio-Glass-Debug-APK
-          path: androidApp/build/outputs/apk/full/debug/*.apk
+          path: src/androidApp/build/outputs/apk/full/debug/*.apk
