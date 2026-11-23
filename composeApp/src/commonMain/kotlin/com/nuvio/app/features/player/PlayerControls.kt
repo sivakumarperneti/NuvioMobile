@@ -571,8 +571,10 @@ internal fun PlayerHeaderIconButton(
     Box(
         modifier = Modifier
             .size(buttonSize)
-            .clip(CircleShape)
-            .background(Color.Black.copy(alpha = 0.35f))
+            .glassSurface(
+                shape = CircleShape,
+                backgroundColor = Color.Black.copy(alpha = 0.44f),
+            )
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
@@ -629,7 +631,10 @@ private fun SideControlButton(
 ) {
     Box(
         modifier = Modifier
-            .clip(CircleShape)
+            .glassSurface(
+                shape = CircleShape,
+                backgroundColor = Color.Black.copy(alpha = 0.44f),
+            )
             .clickable(onClick = onClick)
             .padding(metrics.sideButtonPadding),
         contentAlignment = Alignment.Center,
@@ -656,7 +661,10 @@ internal fun PlayPauseControlButton(
 
     Box(
         modifier = Modifier
-            .clip(CircleShape)
+            .glassSurface(
+                shape = CircleShape,
+                backgroundColor = Color.Black.copy(alpha = 0.44f),
+            )
             .clickable(onClick = onClick)
             .padding(metrics.playButtonPadding),
         contentAlignment = Alignment.Center,
@@ -724,12 +732,11 @@ private fun ProgressControls(
         ) {
             Surface(
                 modifier = Modifier.glassSurface(
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(20.dp),
                     backgroundColor = Color.Black.copy(alpha = 0.62f),
-                    borderColor = Color.White.copy(alpha = 0.14f),
                 ),
                 color = Color.Transparent,
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(20.dp),
                 tonalElevation = 0.dp,
             ) {
                 Row(
@@ -920,7 +927,6 @@ internal fun LockedPlayerOverlay(
                     .glassSurface(
                         shape = CircleShape,
                         backgroundColor = Color.Black.copy(alpha = 0.62f),
-                        borderColor = Color.White.copy(alpha = 0.14f),
                     )
                     .clickable(onClick = onUnlock),
                 contentAlignment = Alignment.Center,
@@ -998,9 +1004,8 @@ private fun TimePill(
     Box(
         modifier = Modifier
             .glassSurface(
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(20.dp),
                 backgroundColor = Color.Black.copy(alpha = 0.62f),
-                borderColor = Color.White.copy(alpha = 0.14f),
             )
             .padding(horizontal = 10.dp, vertical = 4.dp),
     ) {

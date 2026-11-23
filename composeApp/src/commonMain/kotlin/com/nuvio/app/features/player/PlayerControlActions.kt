@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
@@ -52,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import com.nuvio.app.core.ui.AppIconResource
 import com.nuvio.app.core.ui.NuvioBackButton
 import com.nuvio.app.core.ui.appIconPainter
+import com.nuvio.app.core.ui.glassSurface
 import com.nuvio.app.core.ui.nuvioTypeScale
 import nuvio.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
@@ -214,7 +216,15 @@ private fun PlayerAction(
     iconSize: Dp = 24.dp,
     tint: Color = Color.White,
 ) {
-    IconButton(onClick = onClick, modifier = Modifier.size(48.dp)) {
+    IconButton(
+        onClick = onClick,
+        modifier = Modifier
+            .size(48.dp)
+            .glassSurface(
+                shape = RoundedCornerShape(20.dp),
+                backgroundColor = Color.Black.copy(alpha = 0.44f),
+            ),
+    ) {
         if (painter != null) {
             Icon(painter, description, tint = tint, modifier = Modifier.size(iconSize))
         } else if (icon != null) {

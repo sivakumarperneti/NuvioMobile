@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 
 fun Modifier.glassCard(
     shape: Shape = RoundedCornerShape(20.dp),
-    backgroundColor: Color = Color(0xFF161618).copy(alpha = 0.65f),
-    borderColor: Color = Color.White.copy(alpha = 0.14f),
-    borderWidth: Dp = 1.dp,
+    backgroundColor: Color = Color(0xFF11182B).copy(alpha = NuvioTokens.Glass.defaultAlpha),
+    borderColor: Color = NuvioTokens.Glass.borderColor,
+    borderWidth: Dp = NuvioTokens.Glass.borderWidth,
     elevation: Dp = 0.dp,
 ): Modifier = this.glassSurface(
     shape = shape,
@@ -35,9 +35,9 @@ fun Modifier.glassChip(
     isSelected: Boolean = false
 ): Modifier = this.glassSurface(
     shape = shape,
-    backgroundColor = if (isSelected) Color(0xFF3185F5).copy(alpha = NuvioTokens.Glass.defaultAlpha) else Color(0xFF161618).copy(alpha = NuvioTokens.Glass.defaultAlpha),
-    borderColor = if (isSelected) Color(0xFF4DE3FF).copy(alpha = 0.6f) else Color.White.copy(alpha = 0.14f),
-    borderWidth = 1.dp,
+    backgroundColor = if (isSelected) Color(0xFF3185F5).copy(alpha = NuvioTokens.Glass.defaultAlpha) else Color(0xFF11182B).copy(alpha = NuvioTokens.Glass.defaultAlpha),
+    borderColor = if (isSelected) Color(0xFF4DE3FF).copy(alpha = 0.6f) else NuvioTokens.Glass.borderColor,
+    borderWidth = NuvioTokens.Glass.borderWidth,
     elevation = if (isSelected) 4.dp else 0.dp
 )
 

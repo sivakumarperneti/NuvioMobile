@@ -20,9 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalDensity
@@ -207,14 +209,12 @@ private val NuvioRippleConfiguration = RippleConfiguration(
 )
 
 /**
- * Reusable modifier providing translucent dark-frosted glassmorphism surfaces (alpha 0.55–0.72),
- * 1.dp specular borders (Color.White.copy(alpha = 0.14f)), 16.dp to 24.dp rounded corners,
- * and a subtle vertical gradient overlay.
+ * Reusable modifier providing translucent glass surfaces with a specular highlight and crisp border.
  */
 @Stable
 fun Modifier.glassSurface(
     shape: Shape = RoundedCornerShape(NuvioTokens.Radius.card),
-    backgroundColor: Color = Color(0xFF161618).copy(alpha = NuvioTokens.Glass.defaultAlpha),
+    backgroundColor: Color = Color(0xFF11182B).copy(alpha = NuvioTokens.Glass.defaultAlpha),
     borderColor: Color = NuvioTokens.Glass.borderColor,
     borderWidth: Dp = NuvioTokens.Glass.borderWidth,
     hasGradientOverlay: Boolean = true,
@@ -229,24 +229,65 @@ fun Modifier.glassSurface(
     return this
         .shadow(elevation, shape)
         .clip(shape)
-        .background(
+        .background(translucentBackground)
+        .then(
             if (hasGradientOverlay) {
-                Brush.verticalGradient(
-                    colors = listOf(
-                        translucentBackground.copy(
-                            alpha = (surfaceAlpha + 0.07f).coerceAtMost(NuvioTokens.Glass.alphaSurfaceMax),
-                        ),
-                        translucentBackground,
-                        translucentBackground.copy(
-                            alpha = (surfaceAlpha - 0.07f).coerceAtLeast(NuvioTokens.Glass.alphaSurfaceMin),
+                Modifier.background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.White.copy(alpha = 0.22f),
+                            Color.White.copy(alpha = 0.04f),
                         ),
                     ),
                 )
             } else {
-                Brush.linearGradient(listOf(translucentBackground, translucentBackground))
+                Modifier
             },
         )
         .border(borderWidth, borderColor, shape)
+}
+
+fun Modifier.ambientGlassBackdrop(): Modifier = drawBehind {
+    val maxDimension = maxOf(size.width, size.height)
+    drawRect(Color(0xFF070913), size = size)
+    drawRect(
+        brush = Brush.radialGradient(
+            colorStops = arrayOf(
+                0f to Color(0xFF263F91).copy(alpha = 0.46f),
+                0.34f to Color(0xFF27347E).copy(alpha = 0.28f),
+                0.72f to Color(0xFF1A214C).copy(alpha = 0.1f),
+                1f to Color.Transparent,
+            ),
+            center = Offset(size.width * 0.08f, size.height * 0.08f),
+            radius = maxDimension * 0.82f,
+        ),
+        size = size,
+    )
+    drawRect(
+        brush = Brush.radialGradient(
+            colorStops = arrayOf(
+                0f to Color(0xFF6241A2).copy(alpha = 0.34f),
+                0.38f to Color(0xFF46327F).copy(alpha = 0.21f),
+                0.76f to Color(0xFF282044).copy(alpha = 0.07f),
+                1f to Color.Transparent,
+            ),
+            center = Offset(size.width * 0.92f, size.height * 0.28f),
+            radius = maxDimension * 0.7f,
+        ),
+        size = size,
+    )
+    drawRect(
+        brush = Brush.radialGradient(
+            colorStops = arrayOf(
+                0f to Color(0xFF243E83).copy(alpha = 0.22f),
+                0.42f to Color(0xFF1B2B63).copy(alpha = 0.12f),
+                1f to Color.Transparent,
+            ),
+            center = Offset(size.width * 0.68f, size.height * 0.98f),
+            radius = maxDimension * 0.66f,
+        ),
+        size = size,
+    )
 }
 
 /**
@@ -256,7 +297,7 @@ fun Modifier.glassSurface(
 fun GlassCard(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(NuvioTokens.Radius.card),
-    backgroundColor: Color = Color(0xFF161618).copy(alpha = NuvioTokens.Glass.defaultAlpha),
+    backgroundColor: Color = Color(0xFF11182B).copy(alpha = NuvioTokens.Glass.defaultAlpha),
     borderColor: Color = NuvioTokens.Glass.borderColor,
     borderWidth: Dp = NuvioTokens.Glass.borderWidth,
     elevation: Dp = 0.dp,

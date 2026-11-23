@@ -82,6 +82,7 @@ import com.nuvio.app.core.ui.PosterZoomAnchorHolder
 import com.nuvio.app.core.ui.PosterZoomOverlayAction
 import com.nuvio.app.core.ui.PosterZoomOverlayExitAnimation
 import com.nuvio.app.core.ui.TrackingListPickerDialog
+import com.nuvio.app.core.ui.ambientGlassBackdrop
 import com.nuvio.app.core.ui.isLiquidGlassNativeTabBarSupported
 import com.nuvio.app.core.ui.localizedContinueWatchingSubtitle
 import com.nuvio.app.core.ui.nuvio
@@ -1316,7 +1317,7 @@ internal fun MainAppContent(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.nuvio.colors.background),
+                    .ambientGlassBackdrop(),
             ) {
             Box(
                 modifier = Modifier
@@ -1327,8 +1328,7 @@ internal fun MainAppContent(
                         } else {
                             Modifier
                         },
-                    )
-                    .background(MaterialTheme.nuvio.colors.background),
+                    ),
             ) {
             val verticalBarPadding = LocalVerticalBarPadding.current
             val drawsUnderVerticalBar = currentRoute.drawsUnderVerticalBar(selectedTab)

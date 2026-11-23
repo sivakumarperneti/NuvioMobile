@@ -55,6 +55,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.nuvio.app.core.ui.glassSurface
 import com.nuvio.app.core.ui.focusedAlignment
 import com.nuvio.app.core.ui.rememberBackdropFocusState
 import com.nuvio.app.core.ui.revealAlpha
@@ -439,6 +440,8 @@ private fun HeroContentBlock(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .glassSurface(shape = RoundedCornerShape(20.dp))
+            .padding(16.dp)
             .animateContentSize(),
         horizontalAlignment = if (layout.isTablet) Alignment.Start else Alignment.CenterHorizontally,
     ) {

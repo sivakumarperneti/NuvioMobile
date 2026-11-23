@@ -183,11 +183,11 @@ object NuvioTokens {
     }
 
     object Glass {
-        const val alphaSurfaceMin = 0.55f
-        const val alphaSurfaceMax = 0.72f
-        const val defaultAlpha = 0.65f
-        val borderColor = Color(0xFFFFFFFF).copy(alpha = 0.14f)
-        val borderWidth = 1.dp
+        const val alphaSurfaceMin = 0.38f
+        const val alphaSurfaceMax = 0.48f
+        const val defaultAlpha = 0.44f
+        val borderColor = Color.White.copy(alpha = 0.28f)
+        val borderWidth = 1.2.dp
         val radiusMin = Radius.xl
         val radiusMax = Radius.xxl
     }
@@ -395,9 +395,9 @@ internal fun defaultNuvioThemeTokens(
     val borderDefault = Color(0xFF252A2A)
     val overlayScrim = Color.Black.copy(alpha = NuvioTokens.Opacity.overlayMedium)
 
-    val glassSurface = Color(0xFF161618).copy(alpha = NuvioTokens.Glass.defaultAlpha)
+    val glassSurface = Color(0xFF11182B).copy(alpha = NuvioTokens.Glass.defaultAlpha)
     val glassBorder = NuvioTokens.Glass.borderColor
-    val glassHighlight = Color.White.copy(alpha = 0.08f)
+    val glassHighlight = Color.White.copy(alpha = 0.22f)
 
     return NuvioThemeTokens(
         colors = NuvioColorTokens(

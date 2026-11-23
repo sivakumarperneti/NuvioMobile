@@ -7,7 +7,6 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -35,7 +34,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -43,6 +41,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nuvio.app.core.ui.backdropControlColor
+import com.nuvio.app.core.ui.glassSurface
+import com.nuvio.app.core.ui.NuvioTokens
+import com.nuvio.app.core.ui.nuvio
 import nuvio.composeapp.generated.resources.Res
 import nuvio.composeapp.generated.resources.collections_tab_all
 import nuvio.composeapp.generated.resources.streams_refresh
@@ -177,8 +178,15 @@ private fun FilterChip(
                 scaleY = scale
             }
             .height(36.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(containerColor)
+            .glassSurface(
+                shape = RoundedCornerShape(20.dp),
+                backgroundColor = containerColor.copy(alpha = NuvioTokens.Glass.defaultAlpha),
+                borderColor = if (isSelected) {
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.62f)
+                } else {
+                    MaterialTheme.nuvio.colors.glassBorder
+                },
+            )
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,

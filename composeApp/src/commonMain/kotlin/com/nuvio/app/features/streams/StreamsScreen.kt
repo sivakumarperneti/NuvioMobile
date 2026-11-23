@@ -235,7 +235,7 @@ fun StreamsScreen(
     BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(Color.Transparent),
     ) {
         val isTabletLayout = maxWidth >= 768.dp
 
@@ -756,13 +756,13 @@ internal fun StreamList(
         }
         when {
             hasGroups && anyLoading && !hasAnyStreams -> {
-                item(contentType = "stream_loading") {
+                item(key = "stream_initial_loading", contentType = "stream_loading") {
                     LoadingStateBlock(findingStreamsText = findingStreamsText)
                 }
             }
 
             !hasAnyStreams && !uiState.isAnyLoading -> {
-                item(contentType = "stream_empty") {
+                item(key = "stream_empty_state", contentType = "stream_empty") {
                     EmptyStateBlock(reason = uiState.emptyStateReason)
                 }
             }
@@ -787,11 +787,11 @@ internal fun StreamList(
                     )
                 }
                 if (anyLoading) {
-                    item(contentType = "stream_loading") {
+                    item(key = "stream_footer_loading", contentType = "stream_loading") {
                         FooterLoadingBlock(checkingMoreAddonsText = checkingMoreAddonsText)
                     }
                 }
-                item(contentType = "stream_spacer") {
+                item(key = "stream_bottom_spacer", contentType = "stream_spacer") {
                     Spacer(modifier = Modifier.height(nuvioSafeBottomPadding(80.dp)))
                 }
             }
@@ -834,10 +834,10 @@ private fun LazyListScope.streamSection(
     val sortedSources = streamsBySource.keys.sortedBy { it.lowercase() }
     val showSourceHeaders = sortedSources.size > 1
 
-    sortedSources.forEachIndexed { sourceIndex, sourceName ->
+    sortedSources.forEach { sourceName ->
         val sourceStreams = streamsBySource[sourceName].orEmpty()
         if (showSourceHeaders) {
-            item(key = "source_${sectionKey}_$sourceIndex", contentType = "stream_source_header") {
+            item(key = "source_${sectionKey}_$sourceName", contentType = "stream_source_header") {
                 StreamSourceHeader(sourceName = sourceName)
             }
         }

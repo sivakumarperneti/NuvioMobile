@@ -182,9 +182,9 @@ object ThemeColors {
         onSecondaryVariant = Color.White,
         focusRing = Color(0xFF4DE3FF),
         focusBackground = Color(0xFF172844),
-        background = Color(0xFF0A0D14),
-        backgroundElevated = Color(0xFF161A22),
-        backgroundCard = Color(0xFF1E2430),
+        background = Color(0xFF070913),
+        backgroundElevated = Color(0xFF11182B),
+        backgroundCard = Color(0xFF1B2340),
     )
 
     fun getColorPalette(

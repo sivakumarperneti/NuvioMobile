@@ -198,7 +198,7 @@ private fun CommentCard(
                 .width(cardWidth)
                 .height(cardHeight)
                 .glassSurface(
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(20.dp),
                     backgroundColor = MaterialTheme.nuvio.colors.glassSurface,
                     borderColor = MaterialTheme.nuvio.colors.glassBorder,
                 )
@@ -292,7 +292,7 @@ private fun LoadingCommentCard() {
                 .width(cardWidth)
                 .height(cardHeight)
                 .glassSurface(
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(20.dp),
                     backgroundColor = MaterialTheme.nuvio.colors.glassSurface,
                     borderColor = MaterialTheme.nuvio.colors.glassBorder,
                 ),

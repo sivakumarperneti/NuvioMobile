@@ -126,7 +126,7 @@ internal fun TabletStreamsLayout(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background),
+                        .background(Color.Transparent),
                 )
             }
 

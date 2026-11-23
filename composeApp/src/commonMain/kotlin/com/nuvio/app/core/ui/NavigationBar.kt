@@ -104,7 +104,7 @@ fun rememberNuvioNavBarScrollState(): NuvioNavBarScrollState {
 }
 
 /**
- * Floating pill-shaped navigation bar with scroll-responsive labels.
+ * Floating glass navigation bar with scroll-responsive labels.
  *
  * @param hazeState Optional [HazeState] whose source is placed on the content behind this bar.
  *                  When provided, the pill gets a blur-through effect.
@@ -143,7 +143,7 @@ fun NuvioNavigationBar(
         val pillModifier = Modifier
             .padding(horizontal = horizontalPadding)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(NuvioTokens.Radius.full))
+            .clip(RoundedCornerShape(20.dp))
             .then(
                 if (hazeState != null) {
                     Modifier.hazeEffect(state = hazeState) {
@@ -153,7 +153,12 @@ fun NuvioNavigationBar(
                     Modifier
                 },
             )
-            .background(Color(0xFF1C1C1E).copy(alpha = if (hazeState != null) 0.55f else 0.82f))
+            .glassSurface(
+                shape = RoundedCornerShape(20.dp),
+                backgroundColor = Color(0xFF11182B).copy(alpha = NuvioTokens.Glass.defaultAlpha),
+                borderColor = NuvioTokens.Glass.borderColor,
+                borderWidth = NuvioTokens.Glass.borderWidth,
+            )
 
         Box(modifier = pillModifier) {
             Row(
@@ -391,7 +396,7 @@ private fun NavItemLabel(
 
 /**
  * Classic flat navigation bar — the original pre-pill implementation.
- * No floating pill, no labels, no scroll behavior. Simple icon row with a top divider.
+ * Compact icon row with a frosted glass surface.
  */
 @Composable
 fun NuvioClassicNavigationBar(
@@ -399,11 +404,16 @@ fun NuvioClassicNavigationBar(
     content: @Composable NuvioNavigationBarScope.() -> Unit,
 ) {
     val tokens = MaterialTheme.nuvio
-    Column(modifier.fillMaxWidth()) {
-        androidx.compose.material3.HorizontalDivider(
-            thickness = NuvioTokens.Space.hairline,
-            color = tokens.colors.borderDefault,
-        )
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+            .glassSurface(
+                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+                backgroundColor = tokens.colors.glassSurface,
+                borderColor = tokens.colors.glassBorder,
+            ),
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

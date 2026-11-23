@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -999,6 +1000,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize().then(heroStretchModifier),
             horizontalPadding = 0.dp,
             topPadding = if (showHeroSlot) 0.dp else null,
+            backgroundColor = Color.Transparent,
             listState = homeListState,
         ) {
             if (showHeroSlot) {

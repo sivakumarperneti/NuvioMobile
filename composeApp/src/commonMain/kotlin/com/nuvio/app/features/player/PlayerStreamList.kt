@@ -145,7 +145,7 @@ internal fun PlayerStreamList(
                     )
                 }
                 if (streamsUiState.isAnyLoading) {
-                    item(contentType = "stream_skeleton") {
+                    item(key = "player_stream_skeleton", contentType = "stream_skeleton") {
                         StreamCardSkeleton()
                     }
                 }

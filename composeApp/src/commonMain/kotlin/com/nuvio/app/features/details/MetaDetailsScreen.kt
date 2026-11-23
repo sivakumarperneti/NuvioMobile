@@ -31,6 +31,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarOutline
@@ -97,6 +98,8 @@ import com.nuvio.app.core.ui.PosterZoomOverlayAction
 import com.nuvio.app.core.ui.ScreenActivityEffect
 import com.nuvio.app.core.ui.TrackingListPickerDialog
 import com.nuvio.app.core.ui.nuvioSafeBottomPadding
+import com.nuvio.app.core.ui.glassSurface
+import com.nuvio.app.core.ui.nuvio
 import com.nuvio.app.core.ui.rememberArtworkBackdrop
 import com.nuvio.app.core.ui.rememberHeroStretchState
 import dev.chrisbanes.haze.hazeSource
@@ -457,7 +460,7 @@ fun MetaDetailsScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(Color.Transparent),
     ) {
         Box(
             modifier = Modifier
@@ -469,7 +472,7 @@ fun MetaDetailsScreen(
                         Modifier
                     },
                 )
-                .background(MaterialTheme.colorScheme.background),
+                .background(Color.Transparent),
         ) {
             when {
             displayedMeta == null && uiState.isLoading -> {
@@ -1169,7 +1172,7 @@ fun MetaDetailsScreen(
                                         .nestedScroll(heroStretchState.nestedScrollConnection)
                                         .zIndex(1f),
                                 ) {
-                                    item(key = "detail-hero") {
+                                    item(key = "detail-hero", contentType = "detail_hero") {
                                         if (useTabletLayout) {
                                             TabletDetailHero(
                                                 meta = meta,
@@ -1321,7 +1324,7 @@ fun MetaDetailsScreen(
                                         animatedVisibilityScope = animatedVisibilityScope,
                                     )
 
-                                    item(key = "detail-bottom-spacer") {
+                                    item(key = "detail-bottom-spacer", contentType = "detail_spacer") {
                                         Spacer(modifier = Modifier.height(nuvioSafeBottomPadding(32.dp)))
                                     }
                                 }
@@ -2050,7 +2053,7 @@ private fun LazyListScope.configuredMetaSectionItems(
         sectionItems: List<MetaScreenSectionItem>,
         forceTabLayout: Boolean = settings.tabLayout,
     ) {
-        item(key = key) {
+        item(key = key, contentType = "detail_section") {
             DetailSectionContainer(
                 horizontalPadding = contentHorizontalPadding,
                 contentMaxWidth = contentMaxWidth,
@@ -2238,7 +2241,13 @@ private fun DetailSectionContainer(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = horizontalPadding)
-            .padding(bottom = bottomPadding),
+            .padding(bottom = bottomPadding)
+            .glassSurface(
+                shape = RoundedCornerShape(20.dp),
+                backgroundColor = MaterialTheme.nuvio.colors.glassSurface,
+                borderColor = MaterialTheme.nuvio.colors.glassBorder,
+            )
+            .padding(16.dp),
         contentAlignment = Alignment.Center,
     ) {
         Box(
