@@ -88,7 +88,11 @@ fun TrackingListPickerDialog(
                     .height(NuvioTokens.Space.s80 + NuvioTokens.Space.s80 + NuvioTokens.Space.s80 + NuvioTokens.Space.s40),
                 verticalArrangement = Arrangement.spacedBy(tokens.spacing.controlGap),
             ) {
-                items(items = destinations, key = { it.key }) { tab ->
+                items(
+                    items = destinations,
+                    key = { it.key },
+                    contentType = { "tracking_list" },
+                ) { tab ->
                     DialogOption(
                         text = tab.membershipTitle(),
                         selected = membership[tab.key] == true,

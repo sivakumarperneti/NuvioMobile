@@ -494,6 +494,7 @@ private fun BadgeUrlManagerDialog(
                 items(
                     items = imports,
                     key = { import -> import.sourceUrl },
+                    contentType = { "badge_import" },
                 ) { import ->
                     BadgeUrlRow(
                         import = import,
@@ -666,6 +667,7 @@ private fun BadgePreviewDialog(
                 items(
                     items = sections,
                     key = { section -> section.id },
+                    contentType = { "badge_section" },
                 ) { section ->
                     Column(
                         modifier = Modifier.fillMaxWidth(),

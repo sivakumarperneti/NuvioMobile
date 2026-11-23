@@ -32,7 +32,11 @@ internal fun AutoSkipSegmentSelectionDialog(
             modifier = Modifier.fillMaxWidth().weight(1f, fill = false),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(AutoSkipSegmentType.entries, key = { it.storedValue }) { segmentType ->
+            items(
+                items = AutoSkipSegmentType.entries,
+                key = { it.storedValue },
+                contentType = { "auto_skip_segment" },
+            ) { segmentType ->
                 val isSelected = segmentType in selectedTypes
                 DialogOption(
                     text = autoSkipTypeLabel(segmentType),

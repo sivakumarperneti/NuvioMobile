@@ -127,7 +127,11 @@ fun AudioTrackModal(
                             verticalArrangement = Arrangement.spacedBy(6.dp),
                             contentPadding = PaddingValues(vertical = 8.dp),
                         ) {
-                            items(audioTracks, key = { "${it.index}:${it.id}" }) { track ->
+                            items(
+                                items = audioTracks,
+                                key = { "${it.index}:${it.id}" },
+                                contentType = { "audio_track" },
+                            ) { track ->
                                 AudioTrackRow(
                                     track = track,
                                     isSelected = track.index == selectedIndex,

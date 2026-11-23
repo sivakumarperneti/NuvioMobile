@@ -51,9 +51,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.nuvio.app.core.ui.NuvioLoadingIndicator
+import com.nuvio.app.core.ui.NuvioTokens
 import com.nuvio.app.core.ui.PlatformBackHandler
 import com.nuvio.app.core.ui.nuvio
 import com.nuvio.app.core.ui.shimmer
+import com.nuvio.app.core.ui.glassSurface
 import com.nuvio.app.features.streams.ProviderFilterRow
 import com.nuvio.app.features.streams.StreamsUiState
 import com.nuvio.app.features.streams.rememberRefreshRotation
@@ -113,8 +115,12 @@ internal fun PlayerSidePanel(
                     )
                     .width(resolvedWidth)
                     .fillMaxHeight()
-                    .clip(shape)
-                    .background(tokens.colors.surfaceElevated)
+                    .glassSurface(
+                        shape = shape,
+                        backgroundColor = tokens.colors.glassSurface,
+                        borderColor = tokens.colors.glassBorder,
+                        elevation = tokens.elevation.modal,
+                    )
                     .clickable(
                         interactionSource = panelInteraction,
                         indication = null,
@@ -169,8 +175,11 @@ internal fun PlayerDialogButton(
     Box(
         modifier = modifier
             .alpha(if (enabled) 1f else tokens.opacity.disabled)
-            .clip(RoundedCornerShape(12.dp))
-            .background(tokens.colors.surfaceCard)
+            .glassSurface(
+                shape = RoundedCornerShape(12.dp),
+                backgroundColor = tokens.colors.glassSurface,
+                borderColor = tokens.colors.glassBorder,
+            )
             .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 10.dp),
         contentAlignment = Alignment.Center,
@@ -261,12 +270,14 @@ private fun AddonFilterChip(
 
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(20.dp))
-            .background(containerColor)
-            .border(
-                1.dp,
-                if (hasError) tokens.colors.danger.copy(alpha = 0.7f) else tokens.colors.borderDefault,
-                RoundedCornerShape(20.dp),
+            .glassSurface(
+                shape = RoundedCornerShape(20.dp),
+                backgroundColor = if (isSelected) containerColor.copy(alpha = NuvioTokens.Glass.defaultAlpha) else containerColor,
+                borderColor = when {
+                    hasError -> tokens.colors.danger.copy(alpha = 0.7f)
+                    isSelected -> tokens.colors.focusRing.copy(alpha = 0.7f)
+                    else -> tokens.colors.glassBorder
+                },
             )
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 10.dp),

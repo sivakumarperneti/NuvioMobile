@@ -191,7 +191,11 @@ private fun MessageList(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(vertical = 8.dp),
         ) {
-            items(rows, key = { it.message.key }) { row ->
+            items(
+                items = rows,
+                key = { it.message.key },
+                contentType = { "party_message" },
+            ) { row ->
                 MessageRow(
                     row = row,
                     members = members,

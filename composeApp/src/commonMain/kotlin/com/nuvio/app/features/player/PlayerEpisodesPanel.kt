@@ -44,6 +44,7 @@ import com.nuvio.app.core.format.formatReleaseDateForDisplay
 import com.nuvio.app.core.ui.NuvioAnimatedWatchedBadge
 import com.nuvio.app.core.ui.NuvioTokens
 import com.nuvio.app.core.ui.nuvio
+import com.nuvio.app.core.ui.glassSurface
 import com.nuvio.app.features.details.MetaVideo
 import com.nuvio.app.features.streams.StreamItem
 import com.nuvio.app.features.streams.StreamsUiState
@@ -218,7 +219,11 @@ private fun EpisodesListPanelContent(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(horizontal = 4.dp, vertical = 4.dp),
             ) {
-                items(availableSeasons, key = { it }) { season ->
+                items(
+                    items = availableSeasons,
+                    key = { it },
+                    contentType = { "season_chip" },
+                ) { season ->
                     EpisodeSeasonChip(
                         label = if (season == 0) {
                             stringResource(Res.string.episodes_specials)
@@ -259,6 +264,7 @@ private fun EpisodesListPanelContent(
                 itemsIndexed(
                     items = seasonEpisodes,
                     key = { index, episode -> "${episode.season}:${episode.episode}:${episode.id}#$index" },
+                    contentType = { _, _ -> "episode" },
                 ) { _, episode ->
                     val isCurrent = episode.season == currentSeason && episode.episode == currentEpisode
                     val episodeVideoId = buildPlaybackVideoId(
@@ -298,12 +304,14 @@ private fun EpisodeSeasonChip(
 
     Box(
         modifier = Modifier
-            .clip(shape)
-            .background(if (isSelected) Color(0xFFF5F5F5) else tokens.colors.surfaceCard)
-            .border(
-                1.dp,
-                if (isSelected) Color.Transparent else tokens.colors.borderDefault,
-                shape,
+            .glassSurface(
+                shape = shape,
+                backgroundColor = if (isSelected) {
+                    tokens.colors.accent.copy(alpha = NuvioTokens.Glass.defaultAlpha)
+                } else {
+                    tokens.colors.glassSurface
+                },
+                borderColor = if (isSelected) tokens.colors.focusRing else tokens.colors.glassBorder,
             )
             .clickable(onClick = onClick)
             .padding(horizontal = 20.dp, vertical = 10.dp),

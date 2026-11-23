@@ -42,7 +42,11 @@ internal fun LanguageSelectionDialog(
                 .heightIn(max = 420.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(options) { option ->
+            items(
+                items = options,
+                key = { it.value ?: "language-option:default" },
+                contentType = { "language_option" },
+            ) { option ->
                 val isSelected = option.value == selectedValue
                 DialogOption(
                     text = option.label,

@@ -55,9 +55,13 @@ internal fun LazyListScope.serverLibraryContent(
     onRetry: () -> Unit,
 ) {
     when {
-        shelves == null -> items(3) { HomeSkeletonRow(horizontalPadding = 16.dp) }
+        shelves == null -> items(
+            count = 3,
+            key = { "server-library-skeleton:$it" },
+            contentType = { "library_skeleton" },
+        ) { HomeSkeletonRow(horizontalPadding = 16.dp) }
 
-        shelves.isEmpty() -> item {
+        shelves.isEmpty() -> item(key = "server-library-empty", contentType = "library_empty") {
             HomeEmptyStateCard(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = stringResource(Res.string.library_servers_empty_title),
@@ -68,7 +72,7 @@ internal fun LazyListScope.serverLibraryContent(
         else -> shelves.forEach { shelf ->
             val section = shelf.section
             if (section != null && section.items.isNotEmpty()) {
-                item(key = "server-shelf:${section.key}") {
+                item(key = "server-shelf:${section.key}", contentType = "server_shelf") {
                     HomeCatalogRowSection(
                         section = section,
                         watchedKeys = watchedKeys,
@@ -79,7 +83,10 @@ internal fun LazyListScope.serverLibraryContent(
                     )
                 }
             } else if (shelf.failure != null) {
-                item(key = "server-shelf-error:${shelf.ref.connection.id}:${shelf.ref.library.id}") {
+                item(
+                    key = "server-shelf-error:${shelf.ref.connection.id}:${shelf.ref.library.id}",
+                    contentType = "library_error",
+                ) {
                     HomeEmptyStateCard(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         title = stringResource(Res.string.library_server_load_failed, shelf.ref.title),

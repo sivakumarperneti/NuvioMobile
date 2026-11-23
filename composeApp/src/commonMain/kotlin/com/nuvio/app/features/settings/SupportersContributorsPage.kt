@@ -585,6 +585,7 @@ private fun ContributorsCard(
                 items(
                     items = contributors,
                     key = { contributor -> "${contributor.login.lowercase()}-${contributor.profileUrl.orEmpty()}" },
+                    contentType = { "contributor" },
                 ) { contributor ->
                     ContributorRow(
                         contributor = contributor,
@@ -623,6 +624,7 @@ private fun SupportersCard(
                 items(
                     items = supporters,
                     key = { supporter -> supporter.key },
+                    contentType = { "supporter" },
                 ) { supporter ->
                     SupporterRow(
                         supporter = supporter,

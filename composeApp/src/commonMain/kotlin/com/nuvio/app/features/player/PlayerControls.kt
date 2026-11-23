@@ -77,6 +77,7 @@ import com.nuvio.app.core.ui.themePalette
 import com.nuvio.app.core.ui.accentBrush
 import com.nuvio.app.core.ui.appIconPainter
 import com.nuvio.app.core.ui.gradientMask
+import com.nuvio.app.core.ui.glassSurface
 import com.nuvio.app.core.ui.nuvioTypeScale
 import com.nuvio.app.features.streams.StreamBadge
 import nuvio.composeapp.generated.resources.*
@@ -722,13 +723,14 @@ private fun ProgressControls(
             horizontalArrangement = Arrangement.Center,
         ) {
             Surface(
-                color = Color.Black.copy(alpha = 0.5f),
-                shape = RoundedCornerShape(24.dp),
-                modifier = Modifier.border(
-                    width = 1.dp,
-                    color = Color.White.copy(alpha = 0.2f),
+                modifier = Modifier.glassSurface(
                     shape = RoundedCornerShape(24.dp),
+                    backgroundColor = Color.Black.copy(alpha = 0.62f),
+                    borderColor = Color.White.copy(alpha = 0.14f),
                 ),
+                color = Color.Transparent,
+                shape = RoundedCornerShape(24.dp),
+                tonalElevation = 0.dp,
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
@@ -915,9 +917,11 @@ internal fun LockedPlayerOverlay(
             Box(
                 modifier = Modifier
                     .size(78.dp)
-                    .clip(CircleShape)
-                    .background(Color.Black.copy(alpha = 0.52f))
-                    .border(1.dp, Color.White.copy(alpha = 0.18f), CircleShape)
+                    .glassSurface(
+                        shape = CircleShape,
+                        backgroundColor = Color.Black.copy(alpha = 0.62f),
+                        borderColor = Color.White.copy(alpha = 0.14f),
+                    )
                     .clickable(onClick = onUnlock),
                 contentAlignment = Alignment.Center,
             ) {
@@ -993,9 +997,11 @@ private fun TimePill(
 ) {
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color.Black.copy(alpha = 0.5f))
-            .border(1.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(12.dp))
+            .glassSurface(
+                shape = RoundedCornerShape(12.dp),
+                backgroundColor = Color.Black.copy(alpha = 0.62f),
+                borderColor = Color.White.copy(alpha = 0.14f),
+            )
             .padding(horizontal = 10.dp, vertical = 4.dp),
     ) {
         Text(

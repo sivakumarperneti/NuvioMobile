@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.nuvio.app.core.ui.nuvio
+import com.nuvio.app.core.ui.glassSurface
 import nuvio.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 
@@ -83,7 +84,11 @@ internal fun PlayerChaptersPanel(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxHeight(),
             ) {
-                itemsIndexed(chapters, key = { _, chapter -> chapter.startMs }) { index, chapter ->
+                itemsIndexed(
+                    items = chapters,
+                    key = { _, chapter -> chapter.startMs },
+                    contentType = { _, _ -> "chapter" },
+                ) { index, chapter ->
                     val endMs = chapters.getOrNull(index + 1)?.startMs ?: durationMs
                     val isCurrent = index == currentIndex
                     ChapterRow(
@@ -119,8 +124,11 @@ private fun ChapterRow(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(shape)
-            .background(tokens.colors.surfaceCard)
+            .glassSurface(
+                shape = shape,
+                backgroundColor = tokens.colors.glassSurface,
+                borderColor = if (isCurrent) tokens.colors.focusRing else tokens.colors.glassBorder,
+            )
             .then(if (isCurrent) Modifier.border(2.dp, tokens.colors.focusRing, shape) else Modifier)
             .clickable(onClick = onClick)
             .padding(horizontal = 14.dp, vertical = 12.dp),

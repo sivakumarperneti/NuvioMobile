@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.nuvio.app.core.ui.SkeletonBlock
+import com.nuvio.app.core.ui.glassSurface
+import com.nuvio.app.core.ui.nuvio
 import com.nuvio.app.features.debrid.DebridProviders
 
 internal val LocalStreamHighlight = staticCompositionLocalOf<(StreamItem) -> String?> { { null } }
@@ -76,30 +78,19 @@ internal fun StreamCard(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 68.dp)
-            .shadow(
-                elevation = 2.dp,
+            .glassSurface(
                 shape = cardShape,
-                ambientColor = Color.Black.copy(alpha = 0.04f),
-                spotColor = Color.Black.copy(alpha = 0.04f),
-            )
-            .clip(cardShape)
-            .background(
-                if (isCurrent) {
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                backgroundColor = if (isCurrent) {
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.62f)
                 } else {
-                    Color.White.copy(alpha = 0.05f)
+                    MaterialTheme.nuvio.colors.glassSurface
                 },
-            )
-            .then(
-                if (isCurrent || outlined) {
-                    Modifier.border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.52f),
-                        shape = cardShape,
-                    )
+                borderColor = if (isCurrent || outlined) {
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.52f)
                 } else {
-                    Modifier
+                    MaterialTheme.nuvio.colors.glassBorder
                 },
+                elevation = 2.dp,
             )
             .combinedClickable(
                 enabled = enabled,

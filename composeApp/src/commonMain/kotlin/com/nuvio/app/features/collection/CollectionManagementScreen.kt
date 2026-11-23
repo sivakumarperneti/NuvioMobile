@@ -248,7 +248,11 @@ private fun CollectionReorderableList(
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        itemsIndexed(keyedCollections, key = { _, collection -> collection.lazyKey }) { _, keyedCollection ->
+        itemsIndexed(
+            items = keyedCollections,
+            key = { _, collection -> collection.lazyKey },
+            contentType = { _, _ -> "collection" },
+        ) { _, keyedCollection ->
             val collection = keyedCollection.value
             ReorderableItem(reorderableLazyListState, key = keyedCollection.lazyKey) { isDragging ->
                 val elevation by animateDpAsState(if (isDragging) 4.dp else 0.dp)

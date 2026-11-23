@@ -515,7 +515,11 @@ private fun SeasonTextChipScrollRow(
         contentPadding = PaddingValues(horizontal = horizontalScrollPadding),
         horizontalArrangement = Arrangement.spacedBy(sizing.seasonChipGap),
     ) {
-        items(seasons, key = { season -> season }) { season ->
+        items(
+            items = seasons,
+            key = { season -> season },
+            contentType = { "season_chip" },
+        ) { season ->
             val isSelected = season == currentSeason
             Box(
                 modifier = Modifier
@@ -588,7 +592,11 @@ private fun SeasonPosterScrollRow(
         contentPadding = PaddingValues(horizontal = horizontalScrollPadding),
         horizontalArrangement = Arrangement.spacedBy(sizing.seasonChipGap),
     ) {
-        items(seasons, key = { season -> season }) { season ->
+        items(
+            items = seasons,
+            key = { season -> season },
+            contentType = { "season_poster" },
+        ) { season ->
             SeasonPosterButton(
                 label = season.label(),
                 imageUrl = resolveSeasonPoster(
@@ -748,6 +756,7 @@ private fun EpisodeHorizontalRow(
         itemsIndexed(
             items = episodes,
             key = { index, episode -> "${episode.season}:${episode.episode}:${episode.id}#$index" },
+            contentType = { _, _ -> "episode_card" },
         ) { _, episode ->
             val episodeVideoId = buildPlaybackVideoId(
                 parentMetaId = parentMetaId,

@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -81,6 +80,7 @@ import com.nuvio.app.core.ui.nuvioSafeBottomPadding
 import com.nuvio.app.core.ui.shimmer
 import com.nuvio.app.core.ui.LocalVerticalBarPadding
 import com.nuvio.app.core.ui.centeredVerticalBarPadding
+import com.nuvio.app.core.ui.withDuplicateSafeLazyKeys
 import com.nuvio.app.features.debrid.DebridSettingsRepository
 import com.nuvio.app.features.debrid.DirectDebridPlayableResult
 import com.nuvio.app.features.debrid.DirectDebridPlaybackResolver
@@ -733,7 +733,7 @@ internal fun StreamList(
         verticalArrangement = Arrangement.spacedBy(0.dp),
     ) {
         sharedStream?.let { shared ->
-            item(key = "shared_stream") {
+            item(key = "shared_stream", contentType = "stream_section") {
                 Column {
                     StreamSectionHeader(
                         addonName = shared.label,
@@ -756,13 +756,13 @@ internal fun StreamList(
         }
         when {
             hasGroups && anyLoading && !hasAnyStreams -> {
-                item {
+                item(contentType = "stream_loading") {
                     LoadingStateBlock(findingStreamsText = findingStreamsText)
                 }
             }
 
             !hasAnyStreams && !uiState.isAnyLoading -> {
-                item {
+                item(contentType = "stream_empty") {
                     EmptyStateBlock(reason = uiState.emptyStateReason)
                 }
             }
@@ -787,11 +787,11 @@ internal fun StreamList(
                     )
                 }
                 if (anyLoading) {
-                    item {
+                    item(contentType = "stream_loading") {
                         FooterLoadingBlock(checkingMoreAddonsText = checkingMoreAddonsText)
                     }
                 }
-                item {
+                item(contentType = "stream_spacer") {
                     Spacer(modifier = Modifier.height(nuvioSafeBottomPadding(80.dp)))
                 }
             }
@@ -819,7 +819,7 @@ private fun LazyListScope.streamSection(
     if (group.streams.isEmpty() && !group.isLoading) return
 
     if (showHeader) {
-        item(key = "header_$sectionKey") {
+        item(key = "header_$sectionKey", contentType = "stream_header") {
             StreamSectionHeader(
                 addonName = group.addonName,
                 isLoading = group.isLoading,
@@ -837,22 +837,23 @@ private fun LazyListScope.streamSection(
     sortedSources.forEachIndexed { sourceIndex, sourceName ->
         val sourceStreams = streamsBySource[sourceName].orEmpty()
         if (showSourceHeaders) {
-            item(key = "source_${sectionKey}_$sourceIndex") {
+            item(key = "source_${sectionKey}_$sourceIndex", contentType = "stream_source_header") {
                 StreamSourceHeader(sourceName = sourceName)
             }
         }
 
-        itemsIndexed(
-            items = sourceStreams,
-            key = { index, stream ->
+        items(
+            items = sourceStreams.withDuplicateSafeLazyKeys { stream ->
                 streamCardRenderKey(
                     sectionKey = sectionKey,
-                    sourceIndex = sourceIndex,
-                    itemIndex = index,
+                    sourceName = sourceName,
                     stream = stream,
                 )
             },
-        ) { _, stream ->
+            key = { keyedStream -> keyedStream.lazyKey },
+            contentType = { "stream" },
+        ) { keyedStream ->
+            val stream = keyedStream.value
             val isSelectable = stream.isSelectableForPlayback(debridEnabled)
             val isUnsupportedTorrentStream =
                 stream.needsLocalDebridResolve &&
@@ -890,15 +891,14 @@ internal fun streamSectionRenderKey(
 
 internal fun streamCardRenderKey(
     sectionKey: String,
-    sourceIndex: Int,
-    itemIndex: Int,
+    sourceName: String,
     stream: StreamItem,
 ): String = buildString {
     append(sectionKey)
     append(':')
-    append(sourceIndex)
+    append(sourceName)
     append(':')
-    append(itemIndex)
+    append(stream.addonName)
     append(':')
     append(stream.url ?: stream.infoHash ?: stream.clientResolve?.infoHash ?: stream.streamLabel)
     stream.externalUrl?.let {

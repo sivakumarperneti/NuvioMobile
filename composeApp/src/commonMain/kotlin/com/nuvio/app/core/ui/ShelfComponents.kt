@@ -1,6 +1,7 @@
 package com.nuvio.app.core.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -74,6 +75,9 @@ fun <T> NuvioShelfSection(
     itemContent: @Composable (T) -> Unit,
 ) {
     val tokens = MaterialTheme.nuvio
+    val keyedEntries = remember(entries, key) {
+        key?.let { itemKey -> entries.withDuplicateSafeLazyKeys(itemKey) }
+    }
     ScreenActivityEffect(state) { active ->
         if (!active) state.stopScroll()
     }
@@ -95,10 +99,11 @@ fun <T> NuvioShelfSection(
             contentPadding = rowContentPadding.withVerticalBar(),
             horizontalArrangement = Arrangement.spacedBy(itemSpacing),
         ) {
-            if (key != null) {
+            if (keyedEntries != null) {
                 items(
-                    items = entries.withDuplicateSafeLazyKeys(key),
+                    items = keyedEntries,
                     key = { entry -> entry.lazyKey },
+                    contentType = { "shelf_item" },
                 ) { keyedEntry ->
                     if (animatePlacement) {
                         Box(modifier = Modifier.animateItem()) { itemContent(keyedEntry.value) }
@@ -107,7 +112,10 @@ fun <T> NuvioShelfSection(
                     }
                 }
             } else {
-                items(entries) { entry ->
+                items(
+                    items = entries,
+                    contentType = { "shelf_item" },
+                ) { entry ->
                     if (animatePlacement) {
                         Box(modifier = Modifier.animateItem()) { itemContent(entry) }
                     } else {
@@ -157,6 +165,11 @@ fun NuvioPosterCard(
                 .nuvioCardDepth(
                     shape = cardShape,
                     surface = NuvioCardDepthSurface.Posters,
+                )
+                .border(
+                    width = NuvioTokens.Glass.borderWidth,
+                    color = tokens.colors.glassBorder,
+                    shape = cardShape,
                 )
                 .posterCardClickable(
                     onClick = onClick,
@@ -324,9 +337,10 @@ private fun NuvioViewAllPill(
     Box(
         modifier = modifier
             .size(actionSize)
-            .background(
-                color = tokens.colors.surface,
+            .glassSurface(
                 shape = RoundedCornerShape(NuvioTokens.Radius.xl),
+                backgroundColor = tokens.colors.glassSurface,
+                borderColor = tokens.colors.glassBorder,
             )
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         contentAlignment = Alignment.Center,

@@ -197,7 +197,11 @@ private fun AppearanceLanguageBottomSheet(
                 )
             }
 
-            items(options) { option ->
+            items(
+                items = options,
+                key = { it.language.name },
+                contentType = { "app_language" },
+            ) { option ->
                 NuvioBottomSheetActionRow(
                     title = stringResource(option.labelRes),
                     selected = option.language == selectedLanguage,

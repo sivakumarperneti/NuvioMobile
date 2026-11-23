@@ -340,7 +340,11 @@ private fun HomescreenCatalogList(
                 .heightIn(max = if (isTablet) 900.dp else 680.dp),
             state = lazyListState,
         ) {
-            itemsIndexed(items, key = { _, item -> item.key }) { index, item ->
+            itemsIndexed(
+                items = items,
+                key = { _, item -> item.key },
+                contentType = { _, _ -> "home_catalog_setting" },
+            ) { index, item ->
                 ReorderableItem(
                     reorderableLazyListState,
                     key = item.key,

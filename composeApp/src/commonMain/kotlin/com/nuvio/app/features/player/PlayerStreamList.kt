@@ -129,6 +129,7 @@ internal fun PlayerStreamList(
                 itemsIndexed(
                     items = streams,
                     key = { index, _ -> streamKeys[index] },
+                    contentType = { _, _ -> "player_stream" },
                 ) { index, stream ->
                     StreamCard(
                         stream = stream,
@@ -144,7 +145,7 @@ internal fun PlayerStreamList(
                     )
                 }
                 if (streamsUiState.isAnyLoading) {
-                    item {
+                    item(contentType = "stream_skeleton") {
                         StreamCardSkeleton()
                     }
                 }

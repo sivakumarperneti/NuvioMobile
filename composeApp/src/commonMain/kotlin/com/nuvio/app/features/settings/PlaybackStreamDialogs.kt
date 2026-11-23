@@ -204,6 +204,7 @@ internal fun StreamAutoPlayProviderSelectionDialog(
                 items(
                     count = items.size,
                     key = { items[it] },
+                    contentType = { "stream_filter" },
                 ) { index ->
                     val item = items[index]
                     val isSelected = item in selected
@@ -273,6 +274,7 @@ internal fun StreamAutoPlayRegexDialog(
             items(
                 count = presets.size,
                 key = { presets[it].first },
+                contentType = { "regex_preset" },
             ) { index ->
                 val (label, pattern) = presets[index]
                 Surface(

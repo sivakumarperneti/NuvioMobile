@@ -46,7 +46,11 @@ internal fun LibraryListRows(
         return
     }
     LazyColumn(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        items(tabs, key = { it.key }) { tab ->
+        items(
+            items = tabs,
+            key = { it.key },
+            contentType = { "library_tab" },
+        ) { tab ->
             Surface(onClick = { onEdit(tab) }, shape = tokens.shapes.compactCard,
                 color = tokens.colors.surfaceCard, contentColor = tokens.colors.textPrimary) {
                 Row(

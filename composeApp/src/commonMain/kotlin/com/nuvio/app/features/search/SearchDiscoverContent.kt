@@ -75,7 +75,11 @@ internal fun LazyListScope.discoverContent(
 
     when {
         (state.isLoading || isSourceLoading) && state.items.isEmpty() -> {
-            items(2) {
+            items(
+                count = 2,
+                key = { "discover-skeleton:$it" },
+                contentType = { "discover_skeleton" },
+            ) {
                 PosterGridSkeletonRow(
                     columns = columns,
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -96,7 +100,11 @@ internal fun LazyListScope.discoverContent(
         }
 
         else -> {
-            items(count = (state.items.size + columns - 1) / columns) { rowIndex ->
+            items(
+                count = (state.items.size + columns - 1) / columns,
+                key = { "discover-row:$it" },
+                contentType = { "discover_row" },
+            ) { rowIndex ->
                 val firstIndex = rowIndex * columns
                 PosterGridRow(
                     items = state.items.subList(firstIndex, minOf(firstIndex + columns, state.items.size)),
@@ -109,7 +117,7 @@ internal fun LazyListScope.discoverContent(
                 )
             }
             if (state.isLoading) {
-                item {
+                item(key = "discover_loading_more", contentType = "catalog_loading") {
                     CatalogLoadingFooter(
                         modifier = Modifier.padding(horizontal = 16.dp),
                     )

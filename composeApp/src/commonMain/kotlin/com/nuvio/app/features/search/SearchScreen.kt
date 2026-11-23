@@ -298,7 +298,7 @@ fun SearchScreen(
 
         if (query.isBlank()) {
             if (isSearchFocused && recentSearches.isNotEmpty()) {
-                item(key = "recent_searches") {
+                item(key = "recent_searches", contentType = "recent_searches") {
                     SearchRecentSection(
                         recentSearches = recentSearches,
                         onSearchPress = { recentQuery -> query = recentQuery },
@@ -335,7 +335,11 @@ fun SearchScreen(
                 val isWaitingForSearch = normalizedQuery.isNotBlank() && lastRequestedQuery != normalizedQuery
                 when {
                     isWaitingForSearch -> {
-                        items(2) {
+                        items(
+                            count = 2,
+                            key = { "search-waiting-skeleton:$it" },
+                            contentType = { "search_skeleton" },
+                        ) {
                             HomeSkeletonRow(
                                 horizontalPadding = homeSectionPadding,
                             )
@@ -343,7 +347,11 @@ fun SearchScreen(
                     }
 
                     (uiState.isLoading || addonManifestsLoading) && uiState.sections.isEmpty() -> {
-                        items(2) {
+                        items(
+                            count = 2,
+                            key = { "search-loading-skeleton:$it" },
+                            contentType = { "search_skeleton" },
+                        ) {
                             HomeSkeletonRow(
                                 horizontalPadding = homeSectionPadding,
                             )
@@ -351,7 +359,7 @@ fun SearchScreen(
                     }
 
                     uiState.sections.isEmpty() -> {
-                        item {
+                        item(key = "search_empty", contentType = "search_empty") {
                             SearchEmptyStateCard(
                                 reason = uiState.emptyStateReason,
                                 errorMessage = uiState.errorMessage,
@@ -379,6 +387,7 @@ fun SearchScreen(
                         items(
                             items = uiState.sections.withDuplicateSafeLazyKeys { section -> section.key },
                             key = { section -> section.lazyKey },
+                            contentType = { "search_catalog" },
                         ) { keyedSection ->
                             val section = keyedSection.value
                             HomeCatalogRowSection(
@@ -391,7 +400,7 @@ fun SearchScreen(
                             )
                         }
                         if (uiState.isLoading) {
-                            item(key = "search_loading_more") {
+                            item(key = "search_loading_more", contentType = "search_skeleton") {
                                 HomeSkeletonRow(
                                     horizontalPadding = homeSectionPadding,
                                 )

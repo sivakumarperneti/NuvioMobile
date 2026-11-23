@@ -1016,7 +1016,12 @@ private fun <T> DebridSingleChoiceDialog(
                 .heightIn(max = 420.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(options) { option ->
+            items(
+                count = options.size,
+                key = { "debrid_single_option:$it" },
+                contentType = { "debrid_option" },
+            ) { index ->
+                val option = options[index]
                 DialogOption(
                     text = label(option),
                     selected = option == selectedValue,
@@ -1051,7 +1056,12 @@ private fun <T> DebridMultiChoiceDialog(
                 .heightIn(max = 420.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(values) { option ->
+            items(
+                count = values.size,
+                key = { "debrid_multi_option:$it" },
+                contentType = { "debrid_option" },
+            ) { index ->
+                val option = values[index]
                 val selected = option in draft
                 DialogOption(
                     text = label(option),

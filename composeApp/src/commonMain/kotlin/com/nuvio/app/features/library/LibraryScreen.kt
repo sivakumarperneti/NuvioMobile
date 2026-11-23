@@ -448,7 +448,11 @@ fun LibraryScreen(
                         if (displaySettings.layoutMode == LibraryLayoutMode.VERTICAL) {
                             libraryVerticalSkeletonItems(gridColumns)
                         } else {
-                            items(3) {
+                            items(
+                                count = 3,
+                                key = { "library-skeleton:$it" },
+                                contentType = { "library_skeleton" },
+                            ) {
                                 HomeSkeletonRow(
                                     horizontalPadding = 16.dp,
                                 )
@@ -505,6 +509,7 @@ fun LibraryScreen(
                         item(
                             key = "library-saved-controls:${uiState.sourceMode}:" +
                                 "${displaySettings.layoutMode}:$effectiveSortOption",
+                            contentType = "library_controls",
                         ) {
                             LibrarySavedControls(
                                 layoutMode = displaySettings.layoutMode,
@@ -641,7 +646,7 @@ private fun LazyListScope.cloudLibraryContent(
                     )
                 }
 
-                item(key = "cloud-library-search") {
+                item(key = "cloud-library-search", contentType = "cloud_library_search") {
                     CloudLibrarySearchField(
                         query = searchQuery,
                         onQueryChange = onSearchQueryChange,
@@ -656,7 +661,10 @@ private fun LazyListScope.cloudLibraryContent(
                     !providerState.errorMessage.isNullOrBlank() && providerState.items.isEmpty()
                 }
                 failedProviderStates.forEach { providerState ->
-                    item(key = "cloud-error-${providerState.providerId}") {
+                    item(
+                        key = "cloud-error-${providerState.providerId}",
+                        contentType = "cloud_library_error",
+                    ) {
                         HomeEmptyStateCard(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             title = stringResource(Res.string.cloud_library_load_failed, providerState.providerName),
@@ -695,6 +703,7 @@ private fun LazyListScope.cloudLibraryContent(
                     items(
                         items = filteredItems,
                         key = { item -> item.stableKey },
+                        contentType = { "cloud_library_item" },
                     ) { item ->
                         CloudLibraryRow(
                             item = item,
@@ -740,12 +749,16 @@ private fun CloudLibrarySearchField(
 }
 
 private fun LazyListScope.cloudLibrarySkeletonItems() {
-    item(key = "cloud-library-skeleton-toolbar") {
+    item(key = "cloud-library-skeleton-toolbar", contentType = "cloud_library_skeleton") {
         CloudLibrarySkeletonToolbar(
             modifier = Modifier.padding(horizontal = 16.dp),
         )
     }
-    items(3) {
+    items(
+        count = 3,
+        key = { "cloud-library-skeleton-row:$it" },
+        contentType = { "cloud_library_skeleton" },
+    ) {
         CloudLibrarySkeletonRow()
     }
 }

@@ -242,7 +242,11 @@ private fun LazyListScope.downloadsRootContent(
                 },
             )
         }
-        items(items = activeItems, key = { it.id }) { item ->
+        items(
+            items = activeItems,
+            key = { it.id },
+            contentType = { "active_download" },
+        ) { item ->
             ActiveDownloadRow(
                 item = item,
                 speedBytesPerSecond = speeds[item.id],
@@ -254,10 +258,19 @@ private fun LazyListScope.downloadsRootContent(
     }
 
     if (entries.isNotEmpty()) {
-        item(key = "downloaded_header") {
+        item(key = "downloaded_header", contentType = "section_header") {
             SectionHeader(title = stringResource(Res.string.downloads_section_downloaded))
         }
-        items(items = entries, key = { it.key }) { entry ->
+        items(
+            items = entries,
+            key = { it.key },
+            contentType = { entry ->
+                when (entry) {
+                    is DownloadedEntry.Movie -> "downloaded_movie"
+                    is DownloadedEntry.Show -> "downloaded_show"
+                }
+            },
+        ) { entry ->
             when (entry) {
                 is DownloadedEntry.Movie -> DownloadedMovieRow(
                     item = entry.item,
@@ -285,13 +298,13 @@ private fun LazyListScope.downloadsShowContent(
     onOpenActions: (DownloadItem) -> Unit,
 ) {
     if (episodes.isEmpty()) {
-        item(key = "empty") {
+        item(key = "empty", contentType = "downloads_empty") {
             DownloadsEmptyState(title = stringResource(Res.string.downloads_empty_title))
         }
         return
     }
 
-    item(key = "summary") {
+    item(key = "summary", contentType = "downloads_summary") {
         val watchedCount = episodes.count { watchStatusOf(it).isWatched }
         SummaryText(
             listOfNotNull(
@@ -307,7 +320,7 @@ private fun LazyListScope.downloadsShowContent(
         .toList()
         .sortedBy { (season, _) -> season }
         .forEach { (season, seasonEpisodes) ->
-            item(key = "season_$season") {
+            item(key = "season_$season", contentType = "section_header") {
                 SectionHeader(
                     title = if (season == 0) {
                         stringResource(Res.string.episodes_specials)
@@ -320,7 +333,11 @@ private fun LazyListScope.downloadsShowContent(
                     ).joinToString(DownloadTextSeparator),
                 )
             }
-            items(items = seasonEpisodes, key = { it.id }) { item ->
+            items(
+                items = seasonEpisodes,
+                key = { it.id },
+                contentType = { "downloaded_episode" },
+            ) { item ->
                 if (item.status == DownloadStatus.Completed) {
                     DownloadedEpisodeRow(
                         item = item,

@@ -166,6 +166,9 @@ fun CatalogScreen(
             .background(MaterialTheme.colorScheme.background),
     ) {
         val columns = remember(maxWidth) { catalogGridColumnsForWidth(maxWidth) }
+        val keyedItems = remember(uiState.items) {
+            uiState.items.withDuplicateSafeLazyKeys { item -> item.stableKey() }
+        }
 
         Box(modifier = Modifier.fillMaxSize()) {
             LazyVerticalGrid(
@@ -182,7 +185,11 @@ fun CatalogScreen(
                 verticalArrangement = Arrangement.spacedBy(18.dp),
             ) {
                 if (uiState.items.isEmpty() && uiState.isLoading) {
-                    items(columns * 3) {
+                    items(
+                        count = columns * 3,
+                        key = { "catalog_skeleton_$it" },
+                        contentType = { "catalog_skeleton" },
+                    ) {
                         SkeletonPoster(
                             modifier = Modifier.fillMaxWidth(),
                             cornerRadius = posterCardStyle.cornerRadiusDp.dp,
@@ -205,8 +212,9 @@ fun CatalogScreen(
                     }
                 } else {
                     items(
-                        items = uiState.items.withDuplicateSafeLazyKeys { item -> item.stableKey() },
+                        items = keyedItems,
                         key = { item -> item.lazyKey },
+                        contentType = { "catalog_poster" },
                     ) { keyedItem ->
                         val item = keyedItem.value
                         CatalogPosterTile(

@@ -199,7 +199,11 @@ fun SubtitleModal(
                             verticalArrangement = Arrangement.spacedBy(4.dp),
                             contentPadding = PaddingValues(vertical = 8.dp),
                         ) {
-                            items(languageItems, key = { it.key }) { item ->
+                            items(
+                                items = languageItems,
+                                key = { it.key },
+                                contentType = { "subtitle_language" },
+                            ) { item ->
                                 SubtitleLanguageRow(
                                     item = item,
                                     selected = item.key == activeLanguageKey,
@@ -261,7 +265,11 @@ fun SubtitleModal(
                                     verticalArrangement = Arrangement.spacedBy(4.dp),
                                     contentPadding = PaddingValues(vertical = 8.dp),
                                 ) {
-                                    items(keyedOptions, key = { it.lazyKey }) { keyedOption ->
+                                    items(
+                                        items = keyedOptions,
+                                        key = { it.lazyKey },
+                                        contentType = { "subtitle_option" },
+                                    ) { keyedOption ->
                                         val option = keyedOption.value
                                         SubtitleOptionRow(
                                             option = option,

@@ -1,24 +1,38 @@
 package com.nuvio.app.core.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RippleConfiguration
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Typography
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import nuvio.composeapp.generated.resources.Res
 import nuvio.composeapp.generated.resources.jetbrains_sans_bold
 import nuvio.composeapp.generated.resources.jetbrains_sans_regular
@@ -191,6 +205,87 @@ private val NuvioTypeTokens: NuvioTypeScale
 private val NuvioRippleConfiguration = RippleConfiguration(
     color = Color.Black,
 )
+
+/**
+ * Reusable modifier providing translucent dark-frosted glassmorphism surfaces (alpha 0.55–0.72),
+ * 1.dp specular borders (Color.White.copy(alpha = 0.14f)), 16.dp to 24.dp rounded corners,
+ * and a subtle vertical gradient overlay.
+ */
+@Stable
+fun Modifier.glassSurface(
+    shape: Shape = RoundedCornerShape(NuvioTokens.Radius.card),
+    backgroundColor: Color = Color(0xFF161618).copy(alpha = NuvioTokens.Glass.defaultAlpha),
+    borderColor: Color = NuvioTokens.Glass.borderColor,
+    borderWidth: Dp = NuvioTokens.Glass.borderWidth,
+    hasGradientOverlay: Boolean = true,
+    elevation: Dp = 0.dp,
+): Modifier {
+    val surfaceAlpha = backgroundColor.alpha.coerceIn(
+        NuvioTokens.Glass.alphaSurfaceMin,
+        NuvioTokens.Glass.alphaSurfaceMax,
+    )
+    val translucentBackground = backgroundColor.copy(alpha = surfaceAlpha)
+
+    return this
+        .shadow(elevation, shape)
+        .clip(shape)
+        .background(
+            if (hasGradientOverlay) {
+                Brush.verticalGradient(
+                    colors = listOf(
+                        translucentBackground.copy(
+                            alpha = (surfaceAlpha + 0.07f).coerceAtMost(NuvioTokens.Glass.alphaSurfaceMax),
+                        ),
+                        translucentBackground,
+                        translucentBackground.copy(
+                            alpha = (surfaceAlpha - 0.07f).coerceAtLeast(NuvioTokens.Glass.alphaSurfaceMin),
+                        ),
+                    ),
+                )
+            } else {
+                Brush.linearGradient(listOf(translucentBackground, translucentBackground))
+            },
+        )
+        .border(borderWidth, borderColor, shape)
+}
+
+/**
+ * Reusable GlassCard component implementing Jetpack Compose Glassmorphism design system.
+ */
+@Composable
+fun GlassCard(
+    modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(NuvioTokens.Radius.card),
+    backgroundColor: Color = Color(0xFF161618).copy(alpha = NuvioTokens.Glass.defaultAlpha),
+    borderColor: Color = NuvioTokens.Glass.borderColor,
+    borderWidth: Dp = NuvioTokens.Glass.borderWidth,
+    elevation: Dp = 0.dp,
+    onClick: (() -> Unit)? = null,
+    content: @Composable () -> Unit,
+) {
+    val glassModifier = modifier.glassSurface(
+        shape = shape,
+        backgroundColor = backgroundColor,
+        borderColor = borderColor,
+        borderWidth = borderWidth,
+        hasGradientOverlay = true,
+        elevation = elevation,
+    )
+
+    if (onClick != null) {
+        Surface(
+            modifier = glassModifier.clickable(onClick = onClick),
+            color = Color.Transparent,
+            shape = shape,
+            content = content,
+        )
+    } else {
+        Box(
+            modifier = glassModifier,
+            content = content,
+        )
+    }
+}
 
 @Composable
 fun NuvioTheme(

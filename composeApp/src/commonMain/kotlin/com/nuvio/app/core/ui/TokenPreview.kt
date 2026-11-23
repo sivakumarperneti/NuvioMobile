@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,8 +30,11 @@ fun NuvioTokenPreviewSurface(
         contentPadding = PaddingValues(MaterialTheme.nuvio.spacing.screenHorizontal),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.nuvio.spacing.sectionGap),
     ) {
-        items(themes.size) { index ->
-            val theme = themes[index]
+        items(
+            items = themes,
+            key = { it.name },
+            contentType = { "theme_preview" },
+        ) { theme ->
             NuvioTheme(appTheme = theme) {
                 TokenPreviewThemeSection(theme = theme)
             }

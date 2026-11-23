@@ -194,6 +194,7 @@ internal fun LazyListScope.libraryVerticalContent(
             val firstEntry = rowEntries.first()
             "library-vertical:${firstEntry.item.type}:${firstEntry.item.id}"
         },
+        contentType = { "library_poster_row" },
     ) { rowEntries ->
         val resolvedItems = remember(rowEntries, posterPattern) {
             rowEntries.map { entry ->
@@ -225,6 +226,7 @@ internal fun LazyListScope.libraryVerticalSkeletonItems(columns: Int) {
     items(
         count = 2,
         key = { index -> "library-vertical-skeleton:$index" },
+        contentType = { "library_skeleton" },
     ) {
         PosterGridSkeletonRow(
             columns = columns,

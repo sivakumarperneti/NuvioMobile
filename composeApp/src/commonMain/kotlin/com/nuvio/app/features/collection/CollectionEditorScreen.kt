@@ -509,7 +509,11 @@ private fun FolderReorderableList(
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        itemsIndexed(folders, key = { _, folder -> folder.id }) { _, folder ->
+        itemsIndexed(
+            items = folders,
+            key = { _, folder -> folder.id },
+            contentType = { _, _ -> "collection_folder" },
+        ) { _, folder ->
             ReorderableItem(reorderableLazyListState, key = folder.id) { isDragging ->
                 val elevation by animateDpAsState(if (isDragging) 4.dp else 0.dp)
 
@@ -1130,7 +1134,11 @@ private fun TmdbSourcePickerScreen(
                 item {
                     PickerSectionLabel(stringResource(Res.string.collections_editor_tmdb_search_results))
                 }
-                itemsIndexed(state.tmdbCompanyResults) { _, result ->
+                itemsIndexed(
+                    items = state.tmdbCompanyResults,
+                    key = { _, result -> "tmdb_company:${result.id}" },
+                    contentType = { _, _ -> "tmdb_company_result" },
+                ) { _, result ->
                     val title = result.name ?: stringResource(Res.string.collections_editor_tmdb_company_fallback, result.id)
                     val movieSuffix = stringResource(Res.string.collections_editor_tmdb_movies)
                     val seriesSuffix = stringResource(Res.string.collections_editor_tmdb_series)
@@ -1163,7 +1171,11 @@ private fun TmdbSourcePickerScreen(
                 item {
                     PickerSectionLabel(stringResource(Res.string.collections_editor_tmdb_search_results))
                 }
-                itemsIndexed(state.tmdbCollectionResults) { _, result ->
+                itemsIndexed(
+                    items = state.tmdbCollectionResults,
+                    key = { _, result -> "tmdb_collection:${result.id}" },
+                    contentType = { _, _ -> "tmdb_collection_result" },
+                ) { _, result ->
                     val title = result.name ?: stringResource(Res.string.collections_editor_tmdb_collection_fallback, result.id)
                     PickerOptionRow(
                         title = title,
@@ -1566,7 +1578,11 @@ private fun TmdbSourcePickerScreen(
                 PickerSectionLabel(stringResource(Res.string.collections_editor_tmdb_presets))
             }
             if (state.tmdbBuilderMode == TmdbBuilderMode.PRESETS) {
-                itemsIndexed(TmdbCollectionSourceResolver.presets()) { _, preset ->
+                itemsIndexed(
+                    items = TmdbCollectionSourceResolver.presets(),
+                    key = { _, preset -> "tmdb_preset:${preset.source.tmdbId}:${preset.source.title}" },
+                    contentType = { _, _ -> "tmdb_preset" },
+                ) { _, preset ->
                     PickerOptionRow(
                         title = preset.label,
                         subtitle = tmdbSourceSubtitle(preset.source),
@@ -1824,7 +1840,11 @@ private fun LazyListScope.TraktResultSection(
     item {
         PickerSectionLabel(title)
     }
-    itemsIndexed(results) { _, result ->
+    itemsIndexed(
+        items = results,
+        key = { _, result -> result.traktListId },
+        contentType = { _, _ -> "trakt_result" },
+    ) { _, result ->
         PickerOptionRow(
             title = result.title,
             subtitle = result.subtitle,
@@ -2106,7 +2126,11 @@ private fun GenrePickerSheet(
                 }
             }
 
-            itemsIndexed(genreOptions) { _, genre ->
+            itemsIndexed(
+                items = genreOptions,
+                key = { _, genre -> genre },
+                contentType = { _, _ -> "genre" },
+            ) { _, genre ->
                 GenrePickerOptionRow(
                     title = genre,
                     selected = selectedGenre == genre,

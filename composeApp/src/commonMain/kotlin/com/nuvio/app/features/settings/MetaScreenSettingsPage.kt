@@ -260,7 +260,11 @@ private fun MetaSectionReorderableList(
             .heightIn(max = if (isTablet) 820.dp else 640.dp),
         state = lazyListState,
     ) {
-        itemsIndexed(items, key = { _, item -> item.key.name }) { index, item ->
+        itemsIndexed(
+            items = items,
+            key = { _, item -> item.key.name },
+            contentType = { _, _ -> "meta_section_setting" },
+        ) { index, item ->
             ReorderableItem(reorderableLazyListState, key = item.key.name) { isDragging ->
                 val elevation by animateDpAsState(if (isDragging) 4.dp else 0.dp)
 

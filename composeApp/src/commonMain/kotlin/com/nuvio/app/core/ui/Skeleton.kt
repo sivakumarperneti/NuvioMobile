@@ -77,7 +77,11 @@ internal fun SkeletonPosterRow(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             userScrollEnabled = false,
         ) {
-            items(count) {
+            items(
+                count = count,
+                key = { "skeleton_poster_$it" },
+                contentType = { "skeleton_poster" },
+            ) {
                 SkeletonPoster(
                     modifier = Modifier.width(width),
                     aspectRatio = width / height,

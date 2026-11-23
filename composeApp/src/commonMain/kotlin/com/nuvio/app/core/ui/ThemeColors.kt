@@ -173,6 +173,20 @@ object ThemeColors {
         backgroundCard = Color(0xFF222222),
     )
 
+    val Glass = ThemeColorPalette(
+        secondary = Color(0xFF3185F5),
+        secondaryVariant = Color(0xFF4D55E8),
+        accentGradient = listOf(Color(0xFF4DE3FF), Color(0xFF3185F5), Color(0xFF4D55E8)),
+        nativeAccentHex = "#4DE3FF",
+        onSecondary = Color.White,
+        onSecondaryVariant = Color.White,
+        focusRing = Color(0xFF4DE3FF),
+        focusBackground = Color(0xFF172844),
+        background = Color(0xFF0A0D14),
+        backgroundElevated = Color(0xFF161A22),
+        backgroundCard = Color(0xFF1E2430),
+    )
+
     fun getColorPalette(
         theme: AppTheme,
         customColors: CustomThemeColors = CustomThemeColors.Default,

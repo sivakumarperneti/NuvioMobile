@@ -144,7 +144,11 @@ private fun NuvioDropdownOptionsSheet(
                     .fillMaxWidth()
                     .heightIn(max = tokens.breakpoints.largePhone),
             ) {
-                items(options) { option ->
+                items(
+                    items = options,
+                    key = { it.key },
+                    contentType = { "dropdown_option" },
+                ) { option ->
                     NuvioBottomSheetActionRow(
                         title = option.label,
                         onClick = { onSelected(option) },

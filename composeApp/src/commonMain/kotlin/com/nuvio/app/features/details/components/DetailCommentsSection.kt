@@ -24,6 +24,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +37,7 @@ import com.nuvio.app.core.ui.SkeletonBlock
 import com.nuvio.app.core.ui.nuvio
 import com.nuvio.app.core.ui.nuvioHorizontalScrollBleed
 import com.nuvio.app.core.ui.withDuplicateSafeLazyKeys
+import com.nuvio.app.core.ui.glassSurface
 import com.nuvio.app.features.trakt.TraktCommentReview
 import kotlinx.coroutines.flow.distinctUntilChanged
 import nuvio.composeapp.generated.resources.*
@@ -56,6 +58,9 @@ fun DetailCommentsSection(
     horizontalScrollPadding: Dp = 0.dp,
 ) {
     val listState = rememberLazyListState()
+    val keyedComments = remember(comments) {
+        comments.withDuplicateSafeLazyKeys { it.id }
+    }
 
     LaunchedEffect(listState, comments.size, canLoadMore, isLoadingMore, isLoading, error) {
         if (isLoading || !error.isNullOrBlank()) return@LaunchedEffect
@@ -85,7 +90,11 @@ fun DetailCommentsSection(
                     contentPadding = PaddingValues(horizontal = horizontalScrollPadding),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    items(3) {
+                    items(
+                        count = 3,
+                        key = { "loading_comment_$it" },
+                        contentType = { "comment_skeleton" },
+                    ) {
                         LoadingCommentCard()
                     }
                 }
@@ -128,8 +137,9 @@ fun DetailCommentsSection(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     items(
-                        items = comments.withDuplicateSafeLazyKeys { it.id },
+                        items = keyedComments,
                         key = { it.lazyKey },
+                        contentType = { "comment" },
                     ) { keyedReview ->
                         val review = keyedReview.value
                         CommentCard(
@@ -138,7 +148,7 @@ fun DetailCommentsSection(
                         )
                     }
                     if (isLoadingMore) {
-                        item(key = "loading_more_comments") {
+                        item(key = "loading_more_comments", contentType = "comment_skeleton") {
                             LoadingCommentCard()
                         }
                     }
@@ -172,7 +182,6 @@ private fun CommentCard(
     modifier: Modifier = Modifier,
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    val isAmoled = colorScheme.background == Color.Black && colorScheme.surface == Color(0xFF050505)
     val bodyText = if (review.hasSpoilerContent) {
         stringResource(Res.string.detail_comments_spoiler_card)
     } else {
@@ -188,10 +197,15 @@ private fun CommentCard(
             modifier = modifier
                 .width(cardWidth)
                 .height(cardHeight)
+                .glassSurface(
+                    shape = RoundedCornerShape(16.dp),
+                    backgroundColor = MaterialTheme.nuvio.colors.glassSurface,
+                    borderColor = MaterialTheme.nuvio.colors.glassBorder,
+                )
                 .clickable(onClick = onClick),
             shape = RoundedCornerShape(16.dp),
-            color = if (isAmoled) Color(0xFF121212) else colorScheme.surfaceVariant.copy(alpha = 0.5f),
-            tonalElevation = 1.dp,
+            color = Color.Transparent,
+            tonalElevation = 0.dp,
         ) {
             Column(
                 modifier = Modifier
@@ -274,9 +288,16 @@ private fun LoadingCommentCard() {
         val cardHeight = if (isTablet) 210.dp else 190.dp
 
         Surface(
-            modifier = Modifier.width(cardWidth).height(cardHeight),
+            modifier = Modifier
+                .width(cardWidth)
+                .height(cardHeight)
+                .glassSurface(
+                    shape = RoundedCornerShape(16.dp),
+                    backgroundColor = MaterialTheme.nuvio.colors.glassSurface,
+                    borderColor = MaterialTheme.nuvio.colors.glassBorder,
+                ),
             shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerLow,
+            color = Color.Transparent,
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),

@@ -119,11 +119,18 @@ fun NuvioSurfaceCard(
 ) {
     val tokens = MaterialTheme.nuvio
     Surface(
-        modifier = modifier.fillMaxWidth(),
-        color = tokens.colors.surface,
+        modifier = modifier
+            .fillMaxWidth()
+            .glassSurface(
+                shape = tokens.shapes.card,
+                backgroundColor = tokens.colors.glassSurface,
+                borderColor = tokens.colors.glassBorder,
+                elevation = tonalElevation.dp,
+            ),
+        color = Color.Transparent,
         shape = tokens.shapes.card,
-        tonalElevation = tonalElevation.dp,
-        shadowElevation = tokens.elevation.flat,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
     ) {
         Column(
             modifier = Modifier.padding(tokens.spacing.cardPadding),
@@ -287,8 +294,11 @@ fun NuvioBackButton(
     Box(
         modifier = modifier
             .size(buttonSize)
-            .clip(shape)
-            .background(containerColor)
+            .glassSurface(
+                shape = shape,
+                backgroundColor = containerColor.copy(alpha = NuvioTokens.Glass.defaultAlpha),
+                borderColor = MaterialTheme.nuvio.colors.glassBorder,
+            )
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
@@ -381,9 +391,10 @@ fun NuvioInfoBadge(
     val tokens = MaterialTheme.nuvio
     Box(
         modifier = modifier
-            .background(
-                color = tokens.colors.surfaceCard,
+            .glassSurface(
                 shape = tokens.shapes.chip,
+                backgroundColor = tokens.colors.glassSurface,
+                borderColor = tokens.colors.glassBorder,
             )
             .padding(horizontal = NuvioTokens.Space.s10, vertical = NuvioTokens.Space.s6),
     ) {
@@ -507,10 +518,16 @@ fun NuvioToastHost(
             contentAlignment = Alignment.TopCenter,
         ) {
             Surface(
+                modifier = Modifier.glassSurface(
+                    shape = RoundedCornerShape(NuvioTokens.Radius.xl),
+                    backgroundColor = tokens.colors.glassSurface,
+                    borderColor = tokens.colors.glassBorder,
+                    elevation = tokens.elevation.overlay,
+                ),
                 shape = RoundedCornerShape(NuvioTokens.Radius.xl),
-                color = tokens.colors.surfacePopover,
-                tonalElevation = tokens.elevation.raised,
-                shadowElevation = tokens.elevation.overlay,
+                color = Color.Transparent,
+                tonalElevation = 0.dp,
+                shadowElevation = 0.dp,
             ) {
                 Text(
                     text = currentToast.message,
